@@ -1,0 +1,102 @@
+### REST Client Test File
+### Use with REST Client extension in VS Code or similar tools
+### Base URL
+@baseUrl = http://localhost:8000
+@token = your_token_here
+@user1_id = user1_id_here
+@user2_id = user2_id_here
+@image_id = image_id_here
+
+### ============================================
+### AUTHENTICATION ENDPOINTS
+### ============================================
+
+### Register User 1
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "AlicePass123!"
+}
+
+### Register User 2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "BobPass123!"
+}
+
+### Login User 1 (Alice)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "AlicePass123!"
+}
+
+### Login User 2 (Bob)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "BobPass123!"
+}
+
+### ============================================
+### USER MANAGEMENT ENDPOINTS
+### ============================================
+
+### List All Users (Requires Auth)
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### ============================================
+### IMAGE SHARING ENDPOINTS
+### ============================================
+
+### Upload Image (Requires Auth)
+### Note: Use Postman or similar tool for file uploads
+### Form Data:
+###   receiver_id: {{user2_id}}
+###   file: [select image file]
+POST {{baseUrl}}/images/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="receiver_id"
+
+{{user2_id}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test_image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Get Sent Images (Requires Auth)
+GET {{baseUrl}}/images/sent
+Authorization: Bearer {{token}}
+
+### Get Received Images (Requires Auth)
+GET {{baseUrl}}/images/received
+Authorization: Bearer {{token}}
+
+### Download Image (Requires Auth - Only Receiver)
+GET {{baseUrl}}/images/{{image_id}}/download
+Authorization: Bearer {{token}}
+
+### ============================================
+### HEALTH CHECK ENDPOINTS
+### ============================================
+
+### Root Endpoint
+GET {{baseUrl}}/
+
+### Health Check
+GET {{baseUrl}}/health
