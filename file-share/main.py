@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth_routes, user_routes, image_routes
+from routes import auth_routes, user_routes, image_routes, secure_image_routes
 from middleware.audit_logging import AuditLoggingMiddleware
 from database.connection import MongoDBConnection
 
@@ -42,6 +42,7 @@ app.add_middleware(AuditLoggingMiddleware)
 app.include_router(auth_routes.router)
 app.include_router(user_routes.router)
 app.include_router(image_routes.router)
+app.include_router(secure_image_routes.router)
 
 
 @app.get("/")

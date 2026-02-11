@@ -2,10 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register as registerAPI } from '../api/auth';
 
-/**
- * Register Page
- * Allows new users to create an account
- */
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,10 +13,8 @@ const Register = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       await registerAPI(username, password);
-      // Registration successful - redirect to login
       navigate('/login', { state: { message: 'Registration successful! Please login.' } });
     } catch (err) {
       setError(err.response?.data?.detail || 'Registration failed');
@@ -30,11 +24,15 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h1>Register</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
+    <div className="authWrap">
+      <div className="authCard card card--padded">
+        <div className="pageHeader" style={{ textAlign: 'center' }}>
+          <h1 className="authTitle">Create account</h1>
+          <p className="authHint">Join Secure Image Share</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="formGrid">
+          <div className="field">
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -44,10 +42,12 @@ const Register = () => {
               required
               minLength={3}
               maxLength={50}
-              placeholder="Enter username (min 3 characters)"
+              placeholder="Min 3 characters"
+              className="input"
             />
           </div>
-          <div className="form-group">
+
+          <div className="field">
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -57,16 +57,20 @@ const Register = () => {
               required
               minLength={8}
               maxLength={72}
-              placeholder="Enter password (min 8 characters)"
+              placeholder="Min 8 characters"
+              className="input"
             />
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loading} className="btn-primary">
-            {loading ? 'Registering...' : 'Register'}
+
+          {error && <div className="alert alert--error">{error}</div>}
+
+          <button type="submit" disabled={loading} className="btn btn--primary">
+            {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
-        <p className="auth-link">
-          Already have an account? <Link to="/login">Login here</Link>
+
+        <p className="authLink">
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>
@@ -74,4 +78,3 @@ const Register = () => {
 };
 
 export default Register;
-

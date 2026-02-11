@@ -47,30 +47,30 @@ const SentImages = () => {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <h1>Sent Images</h1>
-        <div className="loading">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="page-container">
-        <h1>Sent Images</h1>
-        <div className="error-message">{error}</div>
+      <div style={{ minHeight: 320, display: 'grid', placeItems: 'center' }}>
+        <div style={{ color: 'rgba(15,23,42,0.65)', fontWeight: 800, fontSize: 14 }}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="page-container">
-      <h1>Sent Images</h1>
+    <div>
+      <div className="pageHeader">
+        <h1 className="pageTitle">Sent Images</h1>
+        <p className="pageSubtitle">Images you've sent with steganography</p>
+      </div>
+
+      {error && (
+        <div className="alert alert--error" style={{ marginBottom: 14 }}>{error}</div>
+      )}
+
       {images.length === 0 ? (
-        <div className="empty-state">No images sent yet.</div>
+        <div className="card card--padded">
+          <p className="pageSubtitle" style={{ margin: 0, textAlign: 'center' }}>No images sent yet.</p>
+        </div>
       ) : (
-        <div className="images-list">
-          <table className="images-table">
+        <div className="card tableWrap">
+          <table className="table">
             <thead>
               <tr>
                 <th>Filename</th>
@@ -85,7 +85,7 @@ const SentImages = () => {
                   <td>{image.original_filename}</td>
                   <td>{users[image.receiver_id] || image.receiver_id}</td>
                   <td>
-                    <span className={`status status-${image.status.toLowerCase()}`}>
+                    <span className={image.status === 'DOWNLOADED' ? 'badge badge--ok' : 'badge badge--pending'}>
                       {image.status}
                     </span>
                   </td>
