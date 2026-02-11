@@ -22,3 +22,4 @@ def decrypt_image_bytes(encrypted_bytes: bytes, key: bytes) -> bytes:
     """
     f = Fernet(key)
     return f.decrypt(encrypted_bytes)
+
